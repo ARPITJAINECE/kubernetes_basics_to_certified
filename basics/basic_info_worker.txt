@@ -1,0 +1,9 @@
+5️⃣ Kubelet
+Agent running on every worker node.
+Talks to API Server, starts containers, monitors their health, and ensures pods run as defined in configurations.
+
+
+
+6️⃣ Container Runtime
+Actual engine running containers (like containerd or CRI-O).
+Pulls images, starts containers, and reports their status to kubelet for management and monitoring.
