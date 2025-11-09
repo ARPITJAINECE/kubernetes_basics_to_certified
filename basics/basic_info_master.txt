@@ -1,0 +1,19 @@
+1️⃣ API Server
+Central communication hub of Kubernetes.
+Receives all requests, validates them, and updates cluster data in etcd.
+Acts as the main entry point for everything.
+
+
+2️⃣ etcd
+A reliable key-value database storing entire cluster state — pods, nodes, configs, secrets.
+It’s the cluster’s memory, ensuring data consistency and recovery after restarts.
+
+
+3️⃣ Controller Manager
+Runs background controllers that maintain desired state of the cluster.
+Automatically creates, updates, or deletes pods and resources to keep things running correctly.
+
+
+4️⃣ Scheduler
+Decides which node each new pod should run on.
+Chooses best node based on available resources, policies, and constraints for optimal workload distribution.
