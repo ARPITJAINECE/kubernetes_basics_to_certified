@@ -1,0 +1,12 @@
+1. Newer, improved version of ReplicationController.
+2. Also ensures desired number of pod replicas are maintained.
+3. Uses set-based label selectors (more flexible).
+4. Usually managed automatically by Deployments (you rarely create RS directly).
+
+ex:
+kind: ReplicaSet
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
