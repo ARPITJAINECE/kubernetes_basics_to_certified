@@ -1,0 +1,2 @@
+service - node port allow a port to be exposed to outside the world and also that port is of my node.
+
