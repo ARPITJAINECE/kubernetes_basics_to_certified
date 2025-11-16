@@ -1,0 +1,19 @@
+ENTRYPOINT (Docker) : -
+Defines the main executable the container always runs.
+Harder to override.
+
+
+
+CMD (Docker) : - 
+Provides default arguments to ENTRYPOINT.
+Easy to override.
+
+
+
+
+Override CMD:
+docker run myimage new-args
+
+
+Override ENTRYPOINT:
+docker run --entrypoint new-command myimage

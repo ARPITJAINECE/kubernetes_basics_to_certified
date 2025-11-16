@@ -1,0 +1,17 @@
+Override ENTRYPOINT:
+command: ["new-entrypoint"]
+
+
+Override CMD:
+args: ["new-args"]
+
+
+
+
+Final pod example : 
+spec:
+  containers:
+    - name: app
+      image: myimage
+      command: ["python3"]     # ENTRYPOINT override
+      args: ["server.py"]      # CMD override
