@@ -1,2 +1,33 @@
-service - node port allow a port to be exposed to outside the world and also that port is of my node.
+service 
 
+node port allow a port to be exposed to outside the world and also that port is of my node.
+
+
+1️⃣ ClusterIP (Internal Service)
+
+Default and most commonly used Service type.
+Exposes the app only inside the cluster.
+Ideal for backend microservices and databases.
+Provides internal load-balancing and DNS-based service discovery.
+Essential for large microservice architectures (50+ services).
+
+
+
+
+2️⃣ NodePort (Basic External Access)
+
+Exposes the Service on every node’s IP at ports 30000–32767.
+Allows simple external access without cloud load balancers.
+Not recommended for real production due to limitations.
+Useful for dev, testing, demos, or bare-metal clusters.
+Lacks advanced routing, TLS termination, and HA features.
+
+
+
+3️⃣ LoadBalancer (Production External Access)
+
+Creates a cloud load balancer (AWS ELB, GCP LB, Azure LB).
+Best for production-grade external access for frontends or public APIs.
+Handles external traffic reliably and distributes it to Pods.
+Supports HTTPS/TLS, health checks, HA, and scalability.
+Works perfectly with large microservice backends (ClusterIP-only).
