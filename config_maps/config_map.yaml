@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: myconfig
+data:
+  APP_MODE: "production"
+  DB_HOST: "mysql-service"
+  CACHE_ENABLED: "true"
