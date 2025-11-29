@@ -1,0 +1,38 @@
+What is a CronJob in Kubernetes?
+
+A CronJob is a Kubernetes object that runs Jobs on a schedule, similar to Linux cron.
+
+✔ It automatically creates Jobs at specific times
+✔ Jobs create Pods that run → finish → exit
+✔ Used for repeated tasks (daily, hourly, weekly)
+
+
+
+
+
+
+
+Why do we use CronJobs?
+
+Because some tasks must run:
+every minute
+every hour
+every night
+every Monday
+every month
+
+CronJob automates repeated background work.
+
+
+
+
+Common Use Cases:
+Daily database backup
+Log cleanup
+Sending scheduled reports
+Data processing scripts
+Regular sync jobs
+
+
+
+
