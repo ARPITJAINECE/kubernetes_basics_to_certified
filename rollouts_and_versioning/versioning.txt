@@ -1,0 +1,15 @@
+Definition : Versioning means Kubernetes keeps a history of previous deployment revisions using ReplicaSets.
+
+
+
+Every time you update a Deployment (such as changing image), Kubernetes:
+1. Creates a new ReplicaSet → new version
+2. Keeps old ReplicaSets → older version
+3. Allows you to rollback any time
+
+
+
+Example:
+ReplicaSet-1 → nginx:1.18   (revision 1)
+ReplicaSet-2 → nginx:1.19   (revision 2)
+ReplicaSet-3 → nginx:1.20   (revision 3)

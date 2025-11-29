@@ -1,0 +1,29 @@
+Definition : A rollout is the process of updating Pods in a Deployment to a new version in a controlled way.
+
+
+What rollout does:
+1. Replaces old pods with new pods
+2. Ensures stability
+3. Prevents downtime (depending on strategy)
+4. Creates a new ReplicaSet for the new version
+5. Keeps old ReplicaSets for rollback
+
+
+
+----Types of Rollout Strategies in Kubernetes
+
+ 1. Rolling Update (DEFAULT, MOST USED)
+Pods updated gradually → no downtime.
+
+ 2. Recreate
+Stops ALL old pods → then starts ALL new ones → downtime happens.
+
+ 3. Blue-Green Deployment (not built-in, done using labels/Service switch)
+Run two full environments → switch traffic instantly.
+
+ 4. Canary Deployment (not built-in, done using multiple Deployments + routing)
+Release new version to small % of users → then increase gradually.
+
+
+
+
