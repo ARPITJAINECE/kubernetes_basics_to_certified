@@ -1,0 +1,11 @@
+1. Check rollout status
+kubectl rollout status deployment web
+
+2. Check rollout history
+kubectl rollout history deployment web
+
+3. Rollback to previous version
+kubectl rollout undo deployment web
+
+4. Rollback to specific version
+kubectl rollout undo deployment web --to-revision=2

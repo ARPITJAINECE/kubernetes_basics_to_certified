@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-app
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate          # Rollout Strategy
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+        version: v1
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.20      # Change this to trigger new rollout
+
+
+# What happens when you update image?
+# New ReplicaSet created (new version)
+# Rolling update starts (1 pod new at a time)
+# Old ReplicaSet scaled down
+# Kubernetes keeps old RS as version history
+
+
+# RollingUpdate :
+# RollingUpdate gradually replaces old pods with new ones, ensuring your application stays online. 
+# Pods are updated step-by-step so users never experience downtime during deployment changes.
+
+
+# maxSurge : 
+# maxSurge defines how many extra pods Kubernetes can temporarily create during updates. 
+# It adds new pods before removing old ones, ensuring smoother transitions and higher availability.
+
+
+# maxUnavailable :
+# maxUnavailable sets how many pods can be down during updates. 
+# It protects availability by ensuring a minimum number of pods always stay running while others update.
+
+
+
