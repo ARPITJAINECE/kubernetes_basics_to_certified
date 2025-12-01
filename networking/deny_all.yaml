@@ -1,0 +1,20 @@
+# You have a namespace called dev.
+# You want:
+# ❌ No pod in this namespace should receive ANY traffic
+# ❌ No pod should send ANY traffic
+# ✔ Only traffic allowed is what you explicitly open later using other NetworkPolicies
+# This is the starting point for zero-trust networking.
+
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: deny-all
+  namespace: dev       # apply this policy inside dev namespace
+spec:
+  podSelector: {}      # select ALL pods in the namespace
+  policyTypes:
+    - Ingress          # block all incoming traffic
+    - Egress           # block all outgoing traffic
+  ingress: []          # no allow rules → deny everything
+  egress: []           # no allow rules → deny everything
