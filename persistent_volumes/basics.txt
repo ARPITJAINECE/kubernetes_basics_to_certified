@@ -1,0 +1,16 @@
+1. What Is a Persistent Volume (PV)?
+A Persistent Volume (PV) is a cluster-level storage resource that exists independently of Pods.
+
+Think of it as:
+“A hard disk plugged into the cluster.”
+
+
+
+
+
+
+2. What Is a Persistent Volume Claim (PVC)?
+A Persistent Volume Claim (PVC) is a request for storage made by a Pod.
+
+Think of it as:
+“I want 10Gi storage with ReadWriteOnce access.”

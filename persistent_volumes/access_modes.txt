@@ -1,0 +1,37 @@
+                    Access Modes
+
+Defines how Pods can access the volume.
+
+
+
+
+1️⃣ ReadWriteOnce (RWO)
+Mounted read-write by one node
+
+Use case:
+Databases
+
+
+
+
+2️⃣ ReadOnlyMany (ROX)
+Read-only by many nodes
+
+Use case:
+Static content
+
+
+
+
+3️⃣ ReadWriteMany (RWX)
+Read-write by many nodes
+
+Use case:
+Shared file systems
+
+
+
+
+
+4️⃣ ReadWriteOncePod (RWOP)
+One Pod only (newer)

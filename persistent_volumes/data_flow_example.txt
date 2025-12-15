@@ -1,0 +1,10 @@
+Real Production Data Flow
+Postgres writes data
+        ↓
+Mounted filesystem
+        ↓
+PVC abstraction
+        ↓
+PV resource
+        ↓
+Cloud disk (EBS)

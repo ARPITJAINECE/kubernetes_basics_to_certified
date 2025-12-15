@@ -1,0 +1,274 @@
+Static Provisioning  = Admin creates storage FIRST, app uses it later
+Dynamic Provisioning = App asks for storage, Kubernetes creates it automatically
+
+
+
+
+                1️⃣ Static Provisioning (Old-school, Manual) : 
+
+🔹 Real-life analogy : 
+Admin buys a hard disk and keeps it ready.
+Later, a developer comes and uses that disk.
+
+🔹 How it works (Flow) : 
+Admin creates PV  →  Developer creates PVC  →  PVC binds to PV
+
+
+🔹 Step 1: Admin creates a PersistentVolume (PV)
+
+👉 Storage already exists (disk / NFS / cloud volume)
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-static-demo
+spec:
+  capacity:
+    storage: 10Gi               # Fixed storage size
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: manual      # Important for static provisioning
+  hostPath:                     # Example storage (for demo only)
+    path: /mnt/data
+
+
+📌 Key point:
+PV exists before any application asks for storage
+
+
+
+
+🔹 Step 2: Developer creates a PVC
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-static-demo
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi              # Request ≤ PV size
+  storageClassName: manual      # Must match PV
+
+
+
+
+
+🔹 Step 3: Kubernetes binds PVC → PV
+PVC (5Gi) → PV (10Gi) ✅
+
+Now the PVC is Bound.
+
+
+
+🔹 Step 4: Pod uses the PVC
+volumes:
+- name: app-storage
+  persistentVolumeClaim:
+    claimName: pvc-static-demo
+
+
+
+
+
+
+
+
+
+❌ Problems with Static Provisioning
+
+Admin must:
+Manually create PVs
+Predict storage needs
+Hard to scale
+Painful in large clusters
+
+👉 This is why Dynamic Provisioning exists.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        2️⃣ Dynamic Provisioning (Modern, Production Standard)
+
+                        (Storage is created automatically when an application asks for it — not before.)
+                        (taking example of aws-ebs)
+
+🔹 Real-life analogy
+You order a hard disk online → it’s created and delivered automatically.
+
+
+
+
+🔹 How it works (Flow)
+Developer creates PVC
+        ↓
+StorageClass provisions storage
+        ↓
+PV is created automatically
+        ↓
+PVC binds to PV
+
+💥 No manual PV creation
+
+
+
+🧠 Big Picture (AWS EBS + Dynamic Provisioning)
+Application (PVC)
+      ↓
+Storage rules (StorageClass)
+      ↓
+CSI driver
+      ↓
+Cloud provider (AWS)
+      ↓
+Disk (EBS)
+      ↓
+PV (auto)
+      ↓
+Pod mounts disk
+
+
+
+
+
+
+
+1. Why Companies Use Dynamic Provisioning : 
+Static provisioning does not scale.
+Dynamic provisioning gives:
+Automation
+Safety
+Speed
+Cost control
+Zero manual ops
+
+👉 This is why almost all EKS clusters use it.
+
+
+
+
+
+2. EBS CSI Driver (Foundation) : 
+Dynamic provisioning works only because of CSI.
+
+What CSI Does : 
+Talks to AWS API
+Creates EBS volumes
+Attaches volumes to nodes
+Mounts them into Pods
+
+👉 Without CSI → no dynamic provisioning
+
+
+
+
+3. Production StorageClass for AWS EBS
+
+(This is the most important YAML in dynamic provisioning.)
+
+StorageClass (Production-ready) : (YAML example)
+
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: ebs-gp3-prod
+  labels:
+    environment: production
+provisioner: ebs.csi.aws.com        # AWS EBS CSI driver
+parameters:
+  type: gp3                          # Recommended EBS type
+  fsType: ext4                      # Filesystem
+reclaimPolicy: Retain               # Protect data
+volumeBindingMode: WaitForFirstConsumer    #Volume is created in the same AZ as the Pod and also Prevents scheduling failures
+allowVolumeExpansion: true     #Lets you resize disks without downtime.
+
+
+
+
+
+4. Developer Creates a PVC (This Triggers Everything)
+
+Developer knows:
+App needs storage
+Not how storage works
+
+Production PVC (YAML example) : 
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: orders-db-data
+  namespace: production
+  labels:
+    app: orders-db
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50Gi
+  storageClassName: ebs-gp3-prod
+
+
+
+
+
+
+
+------> What Happens Behind the Scenes (REAL FLOW)
+
+When this PVC is applied:
+
+1️⃣ Kubernetes sees PVC
+2️⃣ Matches StorageClass (ebs-gp3-prod)
+3️⃣ Calls EBS CSI Driver
+4️⃣ CSI Driver calls AWS API
+5️⃣ AWS creates EBS volume (50Gi, gp3)
+6️⃣ Kubernetes auto-creates PV
+7️⃣ PV binds to PVC
+
+
+
+
+5. POD USAGE : 
+Pod Uses the PVC (No Storage Logic in App)
+
+Example: PostgreSQL
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orders-db
+  namespace: production
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orders-db
+  template:
+    metadata:
+      labels:
+        app: orders-db
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:15
+        volumeMounts:
+        - name: data
+          mountPath: /var/lib/postgresql/data
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: orders-db-data

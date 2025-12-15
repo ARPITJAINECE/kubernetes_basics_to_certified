@@ -1,0 +1,49 @@
+---Types of Persistent Volumes (Storage Types) : 
+
+1️⃣ Local Storage
+
+Stored on node disk
+Fast
+❌ Pod tied to node
+
+Examples:
+local
+hostPath (dev only)
+
+
+
+
+2️⃣ Network Storage (Most Common)
+Shared across nodes
+Pod can move
+
+Examples:
+NFS
+iSCSI
+CephFS
+GlusterFS
+
+
+
+
+3️⃣ Cloud Storage : 
+Managed disks from cloud providers:
+AWS EBS
+GCP Persistent Disk
+Azure Disk
+
+
+
+
+4️⃣ CSI (Container Storage Interface) : 
+Modern standard for storage plugins.
+
+Examples:
+AWS EBS CSI
+Azure Disk CSI
+Ceph CSI
+
+
+👉 CSI is the future (and present).
+
+

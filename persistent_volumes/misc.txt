@@ -1,0 +1,6 @@
+PVC claim binding to specific PV depends on below points : 
+1. Sufficient capacity
+2. Access Modes
+3. Volume Modes
+4. Storage Class
+5. Selectors

@@ -1,0 +1,8 @@
+7️⃣ Volume Modes
+
+1. Filesystem (default)
+        Mounted as directory
+
+2. Block
+        Raw block device
+        Used by databases
