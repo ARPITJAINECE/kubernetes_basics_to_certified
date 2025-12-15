@@ -1,0 +1,8 @@
+Q): Why Persistent Storage Is Needed : 
+
+Problem without Persistent Volumes
+Containers are ephemeral
+When a Pod restarts → data is lost
+
+Example:
+Pod crashes → logs, uploads, DB data gone 😱

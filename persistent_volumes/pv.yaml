@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-db-prod              # Unique PV name (cluster-wide)
+  labels:
+    app: database               # Labels help with identification & ops
+    environment: production
+spec:
+  capacity:
+    storage: 50Gi               # Total storage provided by this volume
+
+  volumeMode: Filesystem        # Mounted as a filesystem (default & common)
+
+  accessModes:
+    - ReadWriteOnce              # Only one node can mount it (DB-safe)
+
+  persistentVolumeReclaimPolicy: Retain
+  # Retain = data is NOT deleted when PVC is removed
+  # This is critical for production databases
+
+  storageClassName: csi-standard
+  # Must match the PVC's storageClassName
+  # Used to control binding
+
+  mountOptions:
+    - noatime                    # Improves performance (fewer disk writes)
+
+  csi:
+    driver: ebs.csi.aws.com      # CSI driver (example: AWS EBS)
+    volumeHandle: vol-0abc12345  # Actual cloud disk ID
+    fsType: ext4                # Filesystem used on the volume
