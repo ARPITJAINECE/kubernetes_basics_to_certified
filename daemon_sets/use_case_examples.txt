@@ -1,0 +1,21 @@
+Common Real-World Use Cases (VERY IMPORTANT)
+
+🔹 Log collection : 
+Fluentd
+Fluent Bit
+Filebeat
+
+🔹 Monitoring : 
+Node Exporter
+Datadog agent
+New Relic agent
+
+🔹 Networking : 
+CNI plugins (Calico, Flannel, Cilium)
+kube-proxy (in most clusters)
+
+🔹 Security : 
+Falco
+Antivirus / intrusion detection agents
+
+👉 If it must run on every node → DaemonSet

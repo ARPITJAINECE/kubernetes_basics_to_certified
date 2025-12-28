@@ -1,0 +1,21 @@
+1. DaemonSet Scheduling Rules
+
+    By default:
+    DaemonSet runs on all worker nodes
+    Master/control-plane nodes are usually excluded
+
+    Why?
+    Masters have taints like:
+    node-role.kubernetes.io/control-plane:NoSchedule
+
+
+2. Running DaemonSet on Master Nodes (Optional)
+
+    If you want DaemonSet Pods on master nodes, you must add tolerations.
+
+    Example:
+
+    tolerations:
+    - key: node-role.kubernetes.io/control-plane
+    operator: Exists
+    effect: NoSchedule
