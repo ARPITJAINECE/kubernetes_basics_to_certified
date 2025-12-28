@@ -1,0 +1,24 @@
+A DaemonSet ensures that exactly one Pod runs on each node (or on selected nodes) in a Kubernetes cluster.
+
+
+If a new node is added → a Pod is automatically created on that node.
+If a node is removed → the Pod on that node is removed.
+
+
+
+
+Why DaemonSets Exist (The Problem They Solve) : 
+Some workloads are node-level, not application-level.
+
+Examples:
+Collect logs from each node
+Monitor each node
+Configure networking on each node
+Run security agents on each node
+
+
+Using a Deployment for this would be wrong because:
+Deployment doesn’t guarantee 1 Pod per node
+Scaling replicas ≠ scaling with nodes
+
+👉 DaemonSet scales with nodes, not with replicas

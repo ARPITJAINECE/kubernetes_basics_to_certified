@@ -1,0 +1,100 @@
+# STEP 1 — Deploy Fluentd DaemonSet
+
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: fluentd
+spec:
+  selector:
+    matchLabels:
+      app: fluentd
+  template:
+    metadata:
+      labels:
+        app: fluentd
+    spec:
+      containers:
+      - name: fluentd
+        image: fluent/fluentd:v1.16
+        volumeMounts:
+        - name: varlog
+          mountPath: /var/log
+        - name: containers
+          mountPath: /var/lib/docker/containers
+          readOnly: true
+      volumes:
+      - name: varlog
+        hostPath:
+          path: /var/log
+      - name: containers
+        hostPath:
+          path: /var/lib/docker/containers
+
+---
+
+# STEP 2 — Create Fluentd configuration : 
+# Fluentd needs instructions.
+# We give instructions via ConfigMap.
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluentd-config
+data:
+  fluent.conf: |
+    <source>
+      @type tail
+      path /var/log/containers/*.log
+      pos_file /var/log/fluentd.pos
+      tag kubernetes.*
+      read_from_head true
+      format json
+    </source>
+
+    <match **>
+      @type loki
+      url http://<LOKI_PRIVATE_IP>:3100
+      labels {"job":"kubernetes"}
+    </match>
+
+
+---
+
+# STEP 3 — Mount ConfigMap into Fluentd Pod
+# Final DaemonSet (IMPORTANT)
+
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: fluentd
+spec:
+  selector:
+    matchLabels:
+      app: fluentd
+  template:
+    metadata:
+      labels:
+        app: fluentd
+    spec:
+      containers:
+      - name: fluentd
+        image: grafana/fluent-plugin-loki:latest
+        volumeMounts:
+        - name: varlog
+          mountPath: /var/log
+        - name: containers
+          mountPath: /var/lib/docker/containers
+          readOnly: true
+        - name: config
+          mountPath: /fluentd/etc/fluent.conf
+          subPath: fluent.conf
+      volumes:
+      - name: varlog
+        hostPath:
+          path: /var/log
+      - name: containers
+        hostPath:
+          path: /var/lib/docker/containers
+      - name: config
+        configMap:
+          name: fluentd-config
