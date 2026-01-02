@@ -1,0 +1,37 @@
+Why schedulers ?
+-> to decide that on which node, my Pod should run.
+
+
+
+
+Default Kubernetes scheduler:
+    Watches for Pending Pods
+    Chooses the best node
+    Binds Pod → Node
+
+
+DEFAULT SCHEDULER is : kube-scheduler
+
+
+
+
+
+
+Why would anyone need multiple or custom schedulers?
+    Default scheduler is generic.
+    But real systems may need special rules.
+
+Common real-world needs:
+    Schedule Pods based on custom business logic
+
+Separate scheduling for:
+    Batch jobs
+    ML workloads
+    GPU workloads
+    Experimental scheduling without breaking production
+    Strong isolation between workloads
+
+
+
+
+
