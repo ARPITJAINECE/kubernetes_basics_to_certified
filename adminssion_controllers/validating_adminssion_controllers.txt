@@ -40,8 +40,18 @@ Common policy categories:
     Configuration policies
     Governance policies
     Operational safety policies
+    Label and Annotation Policies
+    Naming Conventions
+    Custom Checks
+    Regulatory Compliances
 
 
+
+Examples of Validating Admission Controller policies : 
+1. PodSecurityPolicy (PSP)
+2. Resource Quota
+3. NetworkPolicies
+4. Namespace Admission Policies
 
 
 
