@@ -1,0 +1,51 @@
+1. What is TLS :
+TLS (Transport Layer Security) means:
+    Secure communication over the network
+
+TLS provides:
+    Encryption – nobody can read data
+    Authentication – you know who you are talking to
+    Integrity – data is not modified
+
+In simple words: TLS = HTTPS = secure + trusted communication.
+
+
+
+
+2. Why Kubernetes needs TLS everywhere : 
+Kubernetes is distributed. Many components talk to each other.
+
+Without TLS:
+    Anyone could impersonate API server
+    Anyone could read secrets
+    Anyone could modify cluster state
+
+So Kubernetes forces TLS almost everywhere.
+
+
+
+
+3. Who issues certificates in Kubernetes? : 
+A : kubeadm / self-managed cluster : 
+    Kubernetes creates: Its own CA
+
+    Signs:
+    API server cert
+    kubelet certs
+    etcd certs
+    ⚠️ These DO expire (usually 1 year).
+
+    Renewal Command : kubeadm certs renew all
+
+    👉 Admin responsibility.
+
+B : Managed Kubernetes (EKS, GKE, AKS)
+    Cloud provider manages:
+        Control plane certs
+        etcd certs
+        kube-apiserver certs
+
+    ✅ Auto-renewed
+    ✅ Zero admin effort
+
+
